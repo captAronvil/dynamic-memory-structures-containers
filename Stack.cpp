@@ -39,17 +39,17 @@ void push(Stack *s, int value) {			// Push функция для сохрани�
 
 int pop(Stack *s) {
 	int temp;
-	Node *np;
+	Node *node_point;
 
 	if (!s->top) {					// программа будет завершена, если стак пустой
 		exit(1);
 	}
 
-	np = s->top;
-	temp = np->item;
-	s->top = np->next;
+	node_point = s->top;
+	temp = node_point->item;
+	s->top = node_point->next;
 	s->size--;
-	free(np);
+	free(node_point);
 
 	return temp;
 }
