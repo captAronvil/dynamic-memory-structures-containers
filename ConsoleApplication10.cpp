@@ -1,0 +1,57 @@
+#include "stdafx.h"
+#include "iostream"
+
+using namespace std;
+
+struct queue_str{
+	int data;
+	queue_str*next = NULL;
+};
+
+struct inf_str {
+	int size = 0;
+	queue_str*first;
+	queue_str*last;
+};
+
+void push(int new_data, inf_str* inf);
+int pop(inf_str* inf);
+
+int main()
+{
+	inf_str* inf = new inf_str;
+
+	push(5, inf);
+	cout << pop(inf) << endl;
+
+	push(2, inf);
+	cout << pop(inf) << endl;
+
+	push(9, inf);
+	cout << pop(inf) << endl;
+	
+	system("pause");
+
+	return 0;
+}
+
+void push(int new_data, inf_str* inf) {
+	queue_str* queue = new queue_str;
+	queue->data = new_data;
+	if (inf->size == 0) {
+		inf->first = queue;
+		inf->last = inf->first;
+	}
+
+	inf->last->next = queue;
+	inf->last = queue;
+	inf->size++;
+}
+
+int pop(inf_str* inf) {
+	int data;
+	data = inf->first->data;
+	inf->first = inf->first->next;
+	inf->size--;
+	return data;
+}
