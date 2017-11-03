@@ -1,0 +1,181 @@
+#include "math.h" 
+#include "clocale" 
+#include "iostream" 
+#include "iomanip" 
+#include <string> 
+#include "cstdio" 
+#include "ctype.h" 
+#include "conio.h" 
+#include <algorithm> 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <io.h> 
+#include <fcntl.h> 
+#include <sys/stat.h> 
+
+
+
+using namespace std; 
+struct STUDENT 
+{ 
+char familia[20]; 
+int nomer; 
+int yspeh[5]; 
+} st; 
+
+void Create_file() //открыли пустой файл для записи 
+{ 
+FILE *fl; 
+fopen_s(&fl, "file.txt", "w"); 
+if (fl == NULL) 
+{ 
+printf("не удалось открыть файл\n"); 
+} 
+fclose(fl); 
+
+} 
+
+STUDENT Input(){ 
+STUDENT stud; 
+printf("Введите фамилию студента: \n"); 
+//cin»stud.familia; 
+getchar(); 
+gets_s(stud.familia); 
+printf("Введите номер группы: \n"); 
+scanf_s("%d", &stud.nomer); 
+printf("Введите успеваемость студента: \n"); 
+for (int k = 0; k < 5; k++){ 
+scanf_s("%i", &stud.yspeh[k]); 
+} 
+return stud; 
+} 
+void Add_str(){ //добавление записи в конец файла 
+FILE *fl; 
+fopen_s(&fl, "file.txt", "a"); 
+if (fl == NULL) 
+printf("Не удается открыть файл. \n"); 
+STUDENT A = Input(); 
+fwrite(&A, sizeof(STUDENT), 1, fl); 
+fclose(fl); 
+} 
+
+void Print_array(){ //выводим на экран запись 
+FILE *fl; 
+fopen_s(&fl, "file.txt", "r+"); 
+if (fl == NULL){ 
+printf("Не удается открыть файл"); 
+return; 
+} 
+STUDENT A; 
+setlocale(LC_ALL, ".1251"); 
+printf("-------------------------------------------------------------------------------\n"); 
+printf("| Фамилия студента | Номер группы | Успеваемость |\n"); 
+printf("-------------------------------------------------------------------------------\n"); 
+setlocale(LC_ALL, ".866"); 
+while (!feof(fl)){ 
+fread(&A, sizeof(STUDENT), 1, fl); 
+if (!feof(fl)) 
+printf("| %15s | %3d | %d %d %d %d %d |\n", A.familia, A.nomer, A.yspeh[0], A.yspeh[1], A.yspeh[2], A.yspeh[3], A.yspeh[4]); 
+} 
+printf("-------------------------------------------------------------------------------\n"); 
+printf("\n"); 
+setlocale(LC_ALL, ".1251"); 
+fclose(fl); 
+} 
+
+void Add_str_after(){ 
+STUDENT stud; 
+FILE *fl; 
+int i; 
+fopen_s(&fl, "file.txt", "r+"); 
+if (fl == NULL) 
+{ 
+printf("не удалось открыть файл\n"); 
+} 
+
+
+fseek(fl, 0, SEEK_END); 
+long l = ftell(fl); 
+int size_af = sizeof(stud); 
+int n = l / size_af; 
+fseek(fl, 0, SEEK_SET); 
+
+
+printf("Введите номер строки после которой хотите вставить запись:"); 
+scanf_s("%d", &i); 
+while (i < 0){ 
+printf("Введите номер строки после которой хотите вставить запись:"); 
+scanf_s("%d", &i); 
+} 
+if (i > n) i = n; 
+STUDENT t = Input(); 
+
+for (int j = n - 1; j > i; j--) 
+{ 
+fseek(fl, j*size_af, SEEK_SET); 
+fread(&stud, sizeof STUDENT, 1, fl); 
+fseek(fl, (j + 1)*size_af, SEEK_SET); 
+fwrite(&stud, sizeof STUDENT, 1, fl); 
+} 
+fseek(fl, (i + 1)*size_af, SEEK_SET); 
+fwrite(&t, sizeof STUDENT, 1, fl); 
+fclose(fl); 
+} 
+
+
+void Add_before(){ 
+STUDENT stud; 
+FILE *fl; 
+int i; 
+fopen_s(&fl, "file.txt", "r+"); 
+if (fl == NULL) 
+{ 
+printf("не удалось открыть файл\n"); 
+} 
+
+
+fseek(fl, 0, SEEK_END); 
+long l = ftell(fl); 
+int size_af = sizeof(stud); 
+int n = l / size_af; 
+fseek(fl, 0, SEEK_SET); 
+
+
+printf("Введите номер строки перед которой хотите вставить запись:"); 
+scanf_s("%d", &i); 
+while (i < 0){ 
+printf("Введите номер строки перед которой хотите вставить запись:"); 
+scanf_s("%d", &i); 
+} 
+if (i > n) i = n; 
+STUDENT r = Input(); 
+
+for (int j = n - 1; j >= i; j--) 
+{ 
+fseek(fl, j*size_af, SEEK_SET); 
+fread(&stud, sizeof STUDENT, 1, fl); 
+fseek(fl, (j + 1)*size_af, SEEK_SET); 
+fwrite(&stud, sizeof STUDENT, 1, fl); 
+} 
+fseek(fl, i*size_af, SEEK_SET); 
+fwrite(&r, sizeof STUDENT, 1, fl); 
+fclose(fl); 
+} 
+
+
+
+void Del_i(int i){ 
+STUDENT stud; 
+FILE *fl; 
+fopen_s(&fl, "file.txt", "r+"); 
+if (fl == NULL) 
+{ 
+printf("не удалось открыть файл\n"); 
+} 
+
+
+fseek(fl, 0, SEEK_END); 
+long l = ftell(fl); 
+int size_af = sizeof(stud); 
+int n = l / size_af; 
+fseek(fl, 0, SEEK_SET);
