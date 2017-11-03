@@ -1,0 +1,98 @@
+#include "stdafx.h"
+#include "iostream"
+
+using namespace std;
+
+typedef class BinarySearchTree {
+private:
+	struct node_s {
+		int data = 0;
+		node_s *left, *right = NULL;
+	};
+	node_s *root = NULL;
+	void add(int, node_s *tr);
+	void show(node_s *&tr);
+public:
+	void add(int);
+	bool empty();
+	void show();
+}bst;
+
+void bst::add(int new_data) {
+	if (root == NULL) {
+		root = new node_s;
+		root->data = new_data;
+		return;
+	}
+	if (new_data <= root->data) {
+		if (root->left != NULL)
+			add(new_data, root->left);
+		else {
+			root->left = new node_s;
+			root->left->data = new_data;
+			return;
+		}
+	}
+	else {
+		if (root->right != NULL)
+			add(new_data, root->right);
+		else {
+			root->right = new node_s;
+			root->data = new_data;
+			return;
+		}
+	}
+}
+
+void bst::add(int new_data, node_s *tr) {
+	if (new_data <= tr->data) {
+		if (tr->left != NULL)
+			add(new_data, tr->left);
+		else {
+			tr->left = new node_s;
+			tr->left->data = new_data;
+			return;
+		}
+	}
+	else {
+		if (tr->right != NULL)
+			add(new_data, tr->right);
+		else {
+			tr->right = new node_s;
+			tr->data = new_data;
+			return;
+		}
+	}
+}
+
+bool bst::empty(){
+	if (root == NULL)
+		return true;
+	else return false;
+}
+void bst::show() {
+	if (root != NULL) {
+		show(*&root->right);
+		cout << root->data << endl;
+		show(*&root->left);
+	}
+}
+void bst::show(node_s *&tr) {
+	if (tr != NULL) {
+		if (tr->right != NULL)
+			show(*&tr->right);
+		cout << tr->data << endl;
+		if (tr->left != NULL)
+			show(*&tr->left);
+	}
+}
+
+int main() {
+	bst tree;
+	for (int i = 1; i < 10; ++i) {
+		tree.add(i);
+	}
+	tree.show();
+	system("PAUSE");
+	return 0;
+}
