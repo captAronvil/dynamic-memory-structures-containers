@@ -1,0 +1,98 @@
+#include "stdafx.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>                    
+#include <clocale>                    
+
+using namespace std;
+
+struct node
+{
+	int data;                          
+	node* prev;                        
+	node* next;						   
+};
+
+struct list
+{
+	int size;                           
+	node* up;                           
+	node* down;                         
+};
+
+void push_back(list *Lst);                //добавить в начало  
+int pop_back(list *Lst);                  //удалить из начала
+void push_front(list *Lst);               //добавить в конец
+int pop_front(list *Lst);                 //удалить из конца
+void insert(list *Lst);					//добавить элементы
+
+
+int main()
+{
+	setlocale(LC_ALL, "Rus");           
+	list List;                          
+	List.size = 0;                      
+	List.up = NULL;                     
+	List.down = NULL;					
+	system("pause");
+	return 0;
+}
+
+void insert(list *Lst)
+{
+	int n;
+	cout << "Введите количество элементов, которые нужно добавить: ";
+	cin >> n;
+	cout << "Добавление элемента в список: " << endl;
+	for (int i = 0; i < n; i++)
+	{
+		push_back(Lst);
+		push_front(Lst);
+	}
+}
+
+void push_front(list *Lst)				
+{
+	int value;							
+	cin >> value;						
+	node* value_ptr = new node;		
+	value_ptr->data = value;		
+	value_ptr->prev = Lst->up;		
+	Lst->up = value_ptr;				
+	Lst->size++;							
+}
+
+int pop_front(list *Lst)					
+	int value_temp = 0;					
+	node *value_ptr;				
+	value_ptr = Lst->up;				
+	value_temp = Lst->up->data;			
+	Lst->up = value_ptr->prev;		
+	delete value_ptr;				
+	Lst->size--;							
+	return value_temp;					
+}
+
+void push_back(list *Lst)
+{
+	int value;							
+	cin >> value;						
+	node* value_ptr = new node;		
+	value_ptr->data = value;		
+	value_ptr->next = Lst->down;		
+	Lst->down = value_ptr;			
+	Lst->size++;						
+}
+
+int pop_back(list *Lst)
+{
+	int value_temp = 0;					
+	node *value_ptr;				
+	value_ptr = Lst->down;			
+	value_temp = Lst->down->data;		
+	Lst->down = value_ptr->next;		
+	delete value_ptr;				
+	Lst->size--;						
+	return value_temp;					
+}
+
