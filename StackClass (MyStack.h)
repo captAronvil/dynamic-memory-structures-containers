@@ -1,0 +1,75 @@
+#ifndef MYSTACK
+#define MYSTACK
+ 
+#include <iostream>
+ 
+using namespace std;
+ 
+template <typename T>
+class MyStack
+{
+private:
+    //структура элемента стека
+    struct Node{
+        Node *prevElement; // указатель на предыдущий элемент стека
+        T value;
+        Node(){
+        }
+        Node(T val){
+            value = val;
+            prevElement = NULL;
+        }
+    };
+ 
+    Node *topElement = new Node();
+    int count;// счетчик элементов стека
+public:
+ 
+    MyStack() { // конструктор
+        count = 0;// изначальный размер
+    }
+    ~MyStack(){}// деструктор
+ 
+    //если стек пуст - возвращаем false
+    bool empty(){
+        return (count == 0);
+    }
+ 
+    //узнать размер стека
+    int size(){
+        return count;
+    }
+ 
+    //положить элементы в стек
+    void push(T value){
+        Node * newElement = new Node(value);//создаем указатель на новый элемент
+        if(count == 0){//если в стеке нет элементов, то верхний элемент стека будет новым элементом
+            topElement = newElement;
+        }
+        else{
+            newElement->prevElement = topElement; // предыдущий элемент становится верхним элементом
+            topElement = newElement;
+        }
+        count++;
+    }
+ 
+    //возвращаем верхний элемент стека
+    T top(){
+        return topElement->value;
+    }
+ 
+    //удаляем верхний элемент стека
+    void pop(){
+           if(!empty()){
+               Node* temp = topElement;
+               topElement = topElement->prevElement;
+               delete temp;
+               count--;
+           }else{
+               std::cout << "The stack is empty!" << std::endl;
+           }
+    }
+};
+ 
+ 
+#endif // MYSTACK
